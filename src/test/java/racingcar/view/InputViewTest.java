@@ -32,4 +32,19 @@ class InputViewTest {
         // then
         assertThat(userInput).containsExactly("alpha", "beta", "gamma");
     }
+
+    @Test
+    @DisplayName("정상적인 시도 횟수 입력에 문제가 없으면 파싱 후 반환")
+    void inputTryCount_success() {
+        // given
+        String input = "5\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+        // when
+        InputView inputView = new InputView();
+        int tryCount = inputView.inputTryCount();
+
+        // then
+        assertThat(tryCount).isEqualTo(5);
+    }
 }
