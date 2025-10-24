@@ -20,14 +20,14 @@ class InputViewTest {
 
     @Test
     @DisplayName("정상적인 자동차 이름에 문제가 없으면 파싱 후 반환")
-    void carNameInput_success() {
+    void inputCarName_success() {
         // given
         String input = "alpha,beta,gamma\n";
         System.setIn(new ByteArrayInputStream(input.getBytes())); // System.in 교체
 
         // when
         InputView inputView = new InputView();
-        List<String> userInput = inputView.carNameInput();
+        List<String> userInput = inputView.inputCarName();
 
         // then
         assertThat(userInput).containsExactly("alpha", "beta", "gamma");
