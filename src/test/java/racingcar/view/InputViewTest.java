@@ -19,7 +19,7 @@ class InputViewTest {
     }
 
     @Test
-    @DisplayName("자동차 이름 입력이 정상적으로 파싱되는지 확인")
+    @DisplayName("정상적인 자동차 이름에 문제가 없으면 파싱 후 반환")
     void carNameInput_success() {
         // given
         String input = "alpha,beta,gamma\n";
