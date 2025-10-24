@@ -1,0 +1,35 @@
+package racingcar.view;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class InputViewTest {
+
+    private final InputStream standardIn = System.in; // 원본 System.in 백업
+
+    @AfterEach
+    void restoreSystemIn() {
+        System.setIn(standardIn);
+    }
+
+    @Test
+    @DisplayName("자동차 이름 입력이 정상적으로 파싱되는지 확인")
+    void carNameInput_success() {
+        // given
+        String input = "alpha,beta,gamma\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes())); // System.in 교체
+
+        // when
+        InputView inputView = new InputView();
+        List<String> userInput = inputView.carNameInput();
+
+        // then
+        assertThat(userInput).containsExactly("alpha", "beta", "gamma");
+    }
+}
