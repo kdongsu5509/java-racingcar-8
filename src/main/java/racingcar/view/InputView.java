@@ -23,4 +23,12 @@ public class InputView {
         validator.validateCarName(inputedCarNameByUser);
         return inputedCarNameByUser;
     }
+
+    public int inputTryCount() {
+        System.out.println("시도할 회수는 몇회인가요?");
+
+        return validator.validateTryCount(
+                Console.readLine()
+        );
+    }
 }
