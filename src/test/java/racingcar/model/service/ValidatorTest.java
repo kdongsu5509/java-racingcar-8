@@ -45,4 +45,40 @@ class ValidatorTest {
                 () -> validator.validateCarName(mockCarNames)
         );
     }
+
+    @Test
+    @DisplayName("정상적인 시도 횟수는 양의 정수를 반환한다.")
+    void validateTryCount_success() {
+        String mockTryCount = "5";
+        Validator validator = new Validator();
+        Assertions.assertEquals(5, validator.validateTryCount(mockTryCount));
+    }
+
+    @Test
+    @DisplayName("시도 횟수가 정수 형식이 아니면 `Illegal")
+    void validateTryCount_notNumber_throwsException() {
+        //given
+        String mockTryCount = "five";
+        Validator validator = new Validator();
+
+        //when, then
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> validator.validateTryCount(mockTryCount)
+        );
+    }
+
+    @Test
+    @DisplayName("시도 횟수가 소수 형식이면 `Illegal")
+    void validateTryCount_notFloat_throwsException() {
+        //given
+        String mockTryCount = "0.35";
+        Validator validator = new Validator();
+
+        //when, then
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> validator.validateTryCount(mockTryCount)
+        );
+    }
 }
