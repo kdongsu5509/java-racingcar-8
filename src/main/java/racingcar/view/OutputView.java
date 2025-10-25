@@ -11,6 +11,25 @@ public class OutputView {
         }
     }
 
+    public void printRaceWinner(List<String> raceWinner) {
+        System.out.println(
+                formatToPrintWinner(raceWinner)
+        );
+    }
+
+    private String formatToPrintWinner(List<String> raceWinner) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("최종 우승자 : ");
+        for (String winnerName : raceWinner) {
+            stringBuilder.append(winnerName);
+            stringBuilder.append(", ");
+        }
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+
+        return stringBuilder.toString();
+    }
+
     private static StringBuilder formatRacingCarStatus(RacingCarStatus status) {
         StringBuilder sb = new StringBuilder();
         formatCarName(status, sb);

@@ -21,6 +21,12 @@ public class RacingCarController {
     public void start() {
         initializeCars();
         raceCarPerUserRequest();
+        printRaceWinner();
+    }
+
+    private void printRaceWinner() {
+        List<String> raceWinner = racingService.findRaceWinner();
+        outputView.printRaceWinner(raceWinner);
     }
 
     private void initializeCars() {
