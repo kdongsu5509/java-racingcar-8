@@ -4,20 +4,23 @@ import java.util.List;
 import racingcar.RacingCarStatus;
 import racingcar.model.service.RacingService;
 import racingcar.view.InputView;
+import racingcar.view.OutputView;
 
 public class RacingCarController {
 
     private final InputView inputView;
+    private final OutputView outputView;
     private final RacingService racingService;
 
-    public RacingCarController(InputView inputView, RacingService racingService) {
+    public RacingCarController(InputView inputView, OutputView outputView, RacingService racingService) {
         this.inputView = inputView;
+        this.outputView = outputView;
         this.racingService = racingService;
     }
 
     public void start() {
         initializeCars();
-        racePerUserRequest();
+        raceCarPerUserRequest();
     }
 
     private void initializeCars() {
@@ -25,10 +28,11 @@ public class RacingCarController {
         racingService.setupRacingCars(carsNames);
     }
 
-    private void racePerUserRequest() {
+    private void raceCarPerUserRequest() {
         int tryCount = inputView.inputTryCount();
         for (int i = 0; i < tryCount; i++) {
             List<RacingCarStatus> currentRacingStatus = racingService.race();
+            outputView.printRacingStatus(currentRacingStatus);
         }
     }
 }
