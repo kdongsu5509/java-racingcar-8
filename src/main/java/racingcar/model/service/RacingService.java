@@ -27,8 +27,15 @@ public class RacingService {
             moveCarRandomly(car);
         }
 
+        return convertToRacingCarStatusList(currentCarStatus);
+    }
+
+    private static List<RacingCarStatus> convertToRacingCarStatusList(List<Car> currentCarStatus) {
         return currentCarStatus.stream()
-                .map(car -> new RacingCarStatus(car.getName(), car.getPosition()))
+                .map(car ->
+                        new RacingCarStatus(
+                                car.getName(), car.getPosition()
+                        ))
                 .toList();
     }
 
