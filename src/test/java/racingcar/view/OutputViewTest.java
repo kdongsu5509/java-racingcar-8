@@ -65,4 +65,24 @@ class OutputViewTest {
 
         assertThat(outputStreamCaptor.toString()).contains("pobi : ");
     }
+
+    @Test
+    @DisplayName("우승자 1명 출력 테스트")
+    void printOnlyOneRaceWinner() {
+        List<String> raceWinner = List.of("pobi");
+
+        outputView.printRaceWinner(raceWinner);
+
+        assertThat(outputStreamCaptor.toString()).contains("최종 우승자 : pobi");
+    }
+
+    @Test
+    @DisplayName("우승자 2명 테스트")
+    void printOnlyTwoRaceWinner() {
+        List<String> raceWinner = List.of("pobi", "woni");
+
+        outputView.printRaceWinner(raceWinner);
+
+        assertThat(outputStreamCaptor.toString()).contains("최종 우승자 : pobi, woni");
+    }
 }
