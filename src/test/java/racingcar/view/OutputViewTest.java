@@ -1,14 +1,25 @@
 package racingcar.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ArgumentConversionException;
+import org.junit.jupiter.params.converter.ArgumentConverter;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import racingcar.RacingCarStatus;
 
 class OutputViewTest {
@@ -30,59 +41,80 @@ class OutputViewTest {
         System.setOut(originalOut);
     }
 
-    @Test
-    @DisplayName("단일 자동차의 상태 출력 테스트")
-    void printSingleCarStatus() {
-        RacingCarStatus status = new RacingCarStatus("pobi", 3);
-        List<RacingCarStatus> statusList = List.of(status);
+    @ParameterizedTest(name = "[{index}] 자동차 상태: {0}")
+    @MethodSource("provideCarStatusesForPrinting")
+    @DisplayName("자동차 상태 리스트를 올바르게 출력해야 한다.")
+    void printRacingStatus_Parameterized(
+            List<RacingCarStatus> statuses, List<String> expectedLines) {
+        outputView.printRacingStatus(statuses);
 
-        outputView.printRacingStatus(statusList);
+        String actualOutput = outputStreamCaptor.toString();
+        String expectedFullOutput = consistExpectOutput(expectedLines);
 
-        assertThat(outputStreamCaptor.toString()).contains("pobi : ---");
+        assertThat(actualOutput).isEqualTo(expectedFullOutput);
     }
 
-    @Test
-    @DisplayName("여러 자동차의 상태 출력 테스트")
-    void printMultipleCarStatuses() {
-        RacingCarStatus status1 = new RacingCarStatus("pobi", 3);
-        RacingCarStatus status2 = new RacingCarStatus("woni", 1);
-        RacingCarStatus status3 = new RacingCarStatus("jun", 0);
-        List<RacingCarStatus> statusList = List.of(status1, status2, status3);
-
-        outputView.printRacingStatus(statusList);
-
-        assertThat(outputStreamCaptor.toString())
-                .contains("pobi : ---", "woni : -", "jun : ");
+    @ParameterizedTest(name = "[{index}] {0} -> {1}")
+    @CsvSource(value = {
+            "pobi|최종 우승자 : pobi",
+            "pobi,woni|최종 우승자 : pobi, woni",
+            "pobi,woni,jun|최종 우승자 : pobi, woni, jun",
+            "java|최종 우승자 : java"
+    }, delimiter = '|')
+    @DisplayName("우승자를 올바르게 출력한다.")
+    void printRaceWinner_with_CsvSource(
+            @ConvertWith(StringListConverter.class) List<String> winners,
+            String expectedOutput
+    ) {
+        outputView.printRaceWinner(winners);
+        assertThat(outputStreamCaptor.toString()).contains(expectedOutput);
     }
 
-    @Test
-    @DisplayName("포지션이 0일 때 출력 테스트")
-    void printStatusWhenPositionIsZero() {
-        RacingCarStatus status = new RacingCarStatus("pobi", 0);
-        List<RacingCarStatus> statusList = List.of(status);
-
-        outputView.printRacingStatus(statusList);
-
-        assertThat(outputStreamCaptor.toString()).contains("pobi : ");
+    private static String consistExpectOutput(List<String> expectedLines) {
+        return expectedLines.stream()
+                .collect(Collectors.joining(System.lineSeparator()))
+                + System.lineSeparator();
     }
 
-    @Test
-    @DisplayName("우승자 1명 출력 테스트")
-    void printOnlyOneRaceWinner() {
-        List<String> raceWinner = List.of("pobi");
-
-        outputView.printRaceWinner(raceWinner);
-
-        assertThat(outputStreamCaptor.toString()).contains("최종 우승자 : pobi");
+    static Stream<Arguments> provideCarStatusesForPrinting() {
+        return Stream.of(
+                singleCarStatus(),
+                singleCarThatPlacedInZeroStatus(),
+                multiCarsStatus()
+        );
     }
 
-    @Test
-    @DisplayName("우승자 2명 테스트")
-    void printOnlyTwoRaceWinner() {
-        List<String> raceWinner = List.of("pobi", "woni");
+    private static class StringListConverter implements ArgumentConverter {
+        @Override
+        public List<String> convert(Object source, ParameterContext context) throws ArgumentConversionException {
+            String inputFromCsv = (String) source;
+            return Arrays.stream(inputFromCsv.split(","))
+                    .toList();
+        }
+    }
 
-        outputView.printRaceWinner(raceWinner);
+    private static Arguments singleCarStatus() {
+        return arguments(
+                List.of(new RacingCarStatus("pobi", 3)),
+                List.of("pobi : ---")
+        );
+    }
 
-        assertThat(outputStreamCaptor.toString()).contains("최종 우승자 : pobi, woni");
+    private static Arguments singleCarThatPlacedInZeroStatus() {
+        return arguments(
+                List.of(new RacingCarStatus("zero", 0)),
+                List.of("zero : ")
+        );
+    }
+
+    private static Arguments multiCarsStatus() {
+        return arguments(
+                List.of(
+                        new RacingCarStatus("pobi", 3),
+                        new RacingCarStatus("woni", 1),
+                        new RacingCarStatus("jun", 0)
+                ),
+                List.of("pobi : ---", "woni : -", "jun : ")
+        );
     }
 }
