@@ -1,6 +1,6 @@
 package racingcar;
 
-import racingcar.controller.RacingCarController;
+import racingcar.controller.RacingController;
 import racingcar.model.repository.CarRepository;
 import racingcar.model.service.RacingService;
 import racingcar.view.InputView;
@@ -12,7 +12,7 @@ public class Application {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
         RacingService racingService = new RacingService(carRepository);
-        RacingCarController controller = new RacingCarController(inputView, outputView, racingService);
+        RacingController controller = new RacingController(inputView, outputView, racingService);
 
         controller.start();
     }
