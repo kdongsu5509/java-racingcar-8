@@ -11,6 +11,13 @@ public class Validator {
         }
     }
 
+    public int validateTryCount(String userInputTryCount) {
+        isEmpty(userInputTryCount);
+        int tryCount = isPositiveInteger(userInputTryCount);
+        isOverZero(tryCount);
+        return tryCount;
+    }
+
     private void validateNameLength(String name) {
         if (name.length() > 5) {
             throw new IllegalArgumentException(
@@ -27,18 +34,30 @@ public class Validator {
         }
     }
 
-    public int validateTryCount(String userInputTryCount) {
-        int tryCount = isNumber(userInputTryCount);
-        isOverZero(tryCount);
-        return tryCount;
+    private void isEmpty(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.CANNOT_EMPTY.getMessage()
+            );
+        }
     }
 
-    private int isNumber(String input) {
+    private int isPositiveInteger(String input) {
         try {
+            isLowerThanIntegerMinAndMaxValue(input);
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(
                     ErrorMessage.ALLOW_ONLY_POSITIVE_INTEGER.getMessage()
+            );
+        }
+    }
+
+    private void isLowerThanIntegerMinAndMaxValue(String input) {
+        long parsedLong = Long.parseLong(input);
+        if (parsedLong > Integer.MAX_VALUE || parsedLong < Integer.MIN_VALUE) {
+            throw new IllegalArgumentException(
+                    ErrorMessage.UNTIL_INTEGER_VALUE.getMessage()
             );
         }
     }

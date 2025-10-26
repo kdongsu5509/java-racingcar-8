@@ -85,8 +85,8 @@ class InputViewTest {
 
     private static List<String> findExpectedOutputFromCsvExpect(String expect) {
         List<String> expected = Arrays.stream(expect.split(","))
-                .filter(s -> !s.trim().isEmpty())
                 .map(String::trim)
+                .filter(trim -> !trim.isEmpty())
                 .toList();
         if (expect.isEmpty()) {
             expected = List.of();
