@@ -1,6 +1,7 @@
 package racingcar.model.service;
 
 import java.util.List;
+import racingcar.global.ErrorMessage;
 
 public class Validator {
     public void validateCarName(List<String> carNames) throws IllegalArgumentException {
@@ -12,13 +13,17 @@ public class Validator {
 
     private void validateNameLength(String name) {
         if (name.length() > 5) {
-            throw new IllegalArgumentException("자동차 이름은 5자를 초과할 수 없습니다.");
+            throw new IllegalArgumentException(
+                    ErrorMessage.OVER_SIZE_FIVE.getMessage()
+            );
         }
     }
 
     private void validateNameNotBlankOrEmpty(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("자동차 이름은 공백이거나 빈 문자열일 수 없습니다.");
+            throw new IllegalArgumentException(
+                    ErrorMessage.CANNOT_EMPTY.getMessage()
+            );
         }
     }
 
@@ -32,13 +37,17 @@ public class Validator {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("시도 횟수는 정수 형식이어야 합니다.");
+            throw new IllegalArgumentException(
+                    ErrorMessage.ALLOW_ONLY_POSITIVE_INTEGER.getMessage()
+            );
         }
     }
 
     private void isOverZero(int number) {
         if (number <= 0) {
-            throw new IllegalArgumentException("시도 횟수는 양의 정수여야 합니다.");
+            throw new IllegalArgumentException(
+                    ErrorMessage.ALLOW_ONLY_POSITIVE_INTEGER.getMessage()
+            );
         }
     }
 }
