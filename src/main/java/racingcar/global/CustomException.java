@@ -7,4 +7,10 @@ public class CustomException {
             super(message);
         }
     }
+
+    public static class NotExistException extends RuntimeException {
+        public NotExistException(String message) {
+            super(message);
+        }
+    }
 }
