@@ -5,7 +5,7 @@ public enum ErrorMessage {
     CANNOT_EMPTY("자동차 이름은 공백이거나 빈 문자열일 수 없습니다."),
     ALLOW_ONLY_POSITIVE_INTEGER("시도 횟수는 양의 정수여야 합니다.");
 
-    private String message;
+    private final String message;
 
     ErrorMessage(String message) {
         this.message = message;
