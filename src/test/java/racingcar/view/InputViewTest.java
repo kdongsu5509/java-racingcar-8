@@ -2,8 +2,8 @@ package racingcar.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,11 +11,9 @@ import org.junit.jupiter.api.Test;
 
 class InputViewTest {
 
-    private final InputStream standardIn = System.in; // 원본 System.in 백업
-
     @AfterEach
     void restoreSystemIn() {
-        System.setIn(standardIn);
+        Console.close();
     }
 
     @Test
