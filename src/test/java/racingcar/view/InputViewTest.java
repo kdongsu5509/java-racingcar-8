@@ -77,9 +77,8 @@ class InputViewTest {
 
         // when
         InputView inputView = new InputView();
-        assertThatThrownBy(
-                inputView::inputTryCount
-        ).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(inputView::inputTryCount)
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(expectErrorMessage);
     }
 
