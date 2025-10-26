@@ -3,6 +3,8 @@ package racingcar.model.repository;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import racingcar.global.CustomException.NotExistException;
+import racingcar.global.ErrorMessage;
 
 public class CarRepository {
 
@@ -16,7 +18,11 @@ public class CarRepository {
     }
 
     public Car findById(Integer id) {
-        return racingCars.get(id);
+        if (racingCars.containsKey(id)) {
+            return racingCars.get(id);
+        } else {
+            throw new NotExistException(ErrorMessage.NOT_FOUND.getMessage());
+        }
     }
 
     public List<Car> findAll() {

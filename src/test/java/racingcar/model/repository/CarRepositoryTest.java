@@ -46,9 +46,10 @@ class CarRepositoryTest {
         //given
         Arrays.stream(carNames.split(","))
                 .forEach(carName -> carRepository.save(new Car(carName)));
+        int key = Integer.parseInt(requestId);
 
         //when,then
-        Assertions.assertThatThrownBy(() -> carRepository.findById(0))
+        Assertions.assertThatThrownBy(() -> carRepository.findById(key))
                 .isInstanceOf(NotExistException.class)
                 .hasMessage(ErrorMessage.NOT_FOUND.getMessage());
     }
